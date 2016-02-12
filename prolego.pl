@@ -1,9 +1,10 @@
 /* algoritmo01(Conjunto, PesoMaximo, Subconjunto) é verdadeiro se o Conjunto for uma lista de missao */
 /* missao(Valor, Peso) e a lista Subconjunto for um subconjunto de Conjunto tal que a soma dos valores no */
 /* subconjunto seja máxima e a soma dos pesos no Subconjunto seja menor ou igual ao PesoMaximo */
-
+/*replicar preenche a primeira linha com zeros. Recebe o PesoMaximo pois
+ * representa a quantidade de colunas na linha*/
 algoritmo01(Conjunto, PesoMaximo, Subconjunto) :-
-	replicar(PesoMaximo, 0, PrimeiraLinha),
+    replicar(PesoMaximo, 0, PrimeiraLinha),
     algoritmo01_1(Conjunto, PesoMaximo, [0|PrimeiraLinha], [], [UltimaLinha|Tabela]),
     reverse(Conjunto, ConjuntoRevertido),
     algoritmo01_3(Tabela, UltimaLinha, PesoMaximo, ConjuntoRevertido, SubconjuntoRevertido),
@@ -25,7 +26,7 @@ algoritmo01_2(I, PesoMaximo, Valor, Peso, LinhaAnterior, [Item|ProximaLinha]):-
     Item2 < Item, !,
     I1 is I + 1, 
     algoritmo01_2(I1, PesoMaximo, Valor, Peso, LinhaAnterior, ProximaLinha).
-algoritmo01_2(I, PesoMaximo, Valor, Peso, LinhaAnterior, [Item|ProximaLinha]):-
+    algoritmo01_2(I, PesoMaximo, Valor, Peso, LinhaAnterior, [Item|ProximaLinha]):-
     num_membro(LinhaAnterior, I, Item), !, 
     I1 is I + 1,
     algoritmo01_2(I1, PesoMaximo, Valor, Peso, LinhaAnterior, ProximaLinha).
@@ -59,6 +60,27 @@ replicar(I, X, [X|Xs]):-
   replicar(I1, X, Xs).
 
 
-    prolego(Subconjunto):-
-        Conjunto=[missao(49,21),missao(23, 1),missao(21, 4)],
-        algoritmo01(Conjunto, 50, Subconjunto).
+%reverse(Xs, Ys):-reverse_1(Xs, [], Ys).
+
+%reverse_1([], As, As).
+%reverse_1([X|Xs], As, Ys):-reverse_1(Xs, [X|As], Ys).
+
+prolego(Subconjunto):-
+/*
+  open('conjunto.txt', read, Arquivo),
+  ler_arquivo(Arquivo, Conjunto),
+  close(Arquivo), 
+*/
+  consult('conjunto.pl'),
+  conjunto(Missoes),
+  algoritmo01(Missoes, 50, Subconjunto ).
+/*
+ler_arquivo(Stream, []):-
+    at_end_of_stream(Stream).
+
+ler_arquivo(Stream, [H|T]):-
+    \+ at_end_of_stream(Stream),
+    read(Stream, H),
+    ler_arquivo(Stream, T).
+
+*/
