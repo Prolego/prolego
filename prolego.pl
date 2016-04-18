@@ -4,7 +4,7 @@
 /*replicar preenche a primeira linha com zeros. Recebe o PesoMaximo pois
  * representa a quantidade de colunas na linha*/
 algoritmo01(Conjunto, PesoMaximo, Subconjunto) :-
-    replicar(PesoMaximo, 0, PrimeiraLinha),
+    zerarPrimeiraLinha(PesoMaximo, 0, PrimeiraLinha),
     algoritmo01_1(Conjunto, PesoMaximo, [0|PrimeiraLinha], [], [UltimaLinha|Tabela]),
     reverse(Conjunto, ConjuntoRevertido),
     algoritmo01_3(Tabela, UltimaLinha, PesoMaximo, ConjuntoRevertido, SubconjuntoRevertido),
@@ -53,11 +53,11 @@ num_membro_1([_|Xs], X, I0, I):-
   I1 is I0 + 1,
   num_membro_1(Xs, X, I1, I).
 
-replicar(0, _, []):-!.  
-replicar(I, X, [X|Xs]):-
-  I > 0,
-  I1 is I - 1,
-  replicar(I1, X, Xs).
+zerarPrimeiraLinha(0, _, []):-!.  
+zerarPrimeiraLinha(PesoMax, Zero, [Zero|Cauda]):-
+  PesoMax > 0,
+  PesoDiminuido is PesoMax - 1,
+  zerarPrimeiraLinha(PesoDiminuido, Zero, Cauda).
 
 
 %reverse(Xs, Ys):-reverse_1(Xs, [], Ys).
@@ -65,22 +65,3 @@ replicar(I, X, [X|Xs]):-
 %reverse_1([], As, As).
 %reverse_1([X|Xs], As, Ys):-reverse_1(Xs, [X|As], Ys).
 
-prolego(Subconjunto):-
-/*
-  open('conjunto.txt', read, Arquivo),
-  ler_arquivo(Arquivo, Conjunto),
-  close(Arquivo), 
-*/
-  consult('conjunto.pl'),
-  conjunto(Missoes),
-  algoritmo01(Missoes, 50, Subconjunto ).
-/*
-ler_arquivo(Stream, []):-
-    at_end_of_stream(Stream).
-
-ler_arquivo(Stream, [H|T]):-
-    \+ at_end_of_stream(Stream),
-    read(Stream, H),
-    ler_arquivo(Stream, T).
-
-*/
